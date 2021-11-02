@@ -23,6 +23,7 @@ project:
   version: "latest"
   #isPrivate: true # in case your project is private you need also API key
   #apiKey: "..."  # change your API key
+  #namespacePerFile: true # if you want endup with "namespace.lang.json" files
 ```
 
 Open your terminal and run next command:
@@ -48,6 +49,7 @@ project:
     - "en"
     - "ru"
   version: "latest"
+  #namespacePerFile: true # if you want endup with "namespace.lang.json" files
 ```
 
 Add some translations to your assets.

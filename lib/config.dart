@@ -10,6 +10,7 @@ class Config {
   late String path;
   late List<String> languages;
   late bool isPrivate;
+  late bool namespacePerFile;
 
   Future<void> loadConfig() async {
     String yamlConfig = await File("./.locize.yaml").readAsString();
@@ -24,6 +25,7 @@ class Config {
     }
 
     isPrivate = projectConfig["isPrivate"] ?? false;
+    namespacePerFile = projectConfig["namespacePerFile"] ?? false;
     projectId = projectConfig["id"];
     apiKey = projectConfig["apiKey"];
     languages =

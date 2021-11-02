@@ -26,14 +26,21 @@ class FlutterI18Locize {
   Future<void> fetch() async {
     for (String lang in config.languages) {
       print("Fetching translations for \"$lang\" language:");
-      var content = {};
+      if (config.namespacePerFile) {
+        for (String namespace in config.namespaces) {
+          var resource = await _getResourceByLang(lang, namespace);
+          await _saveToFile(namespace + "." + lang, resource);
+        }
+      } else {
+        var content = {};
 
-      for (String namespace in config.namespaces) {
-        var resource = await _getResourceByLang(lang, namespace);
-        content[namespace] = resource;
+        for (String namespace in config.namespaces) {
+          var resource = await _getResourceByLang(lang, namespace);
+          content[namespace] = resource;
+        }
+
+        await _saveToFile(lang, content);
       }
-
-      await _saveToFile(lang, content);
     }
   }
 
@@ -41,9 +48,16 @@ class FlutterI18Locize {
     for (String lang in config.languages) {
       print("Uploading translations for \"$lang\" language:");
 
-      for (String namespace in config.namespaces) {
-        var resource = await _loadFromFile(lang);
-        await _saveToServer(lang, namespace, resource[namespace]);
+      if (config.namespacePerFile) {
+        for (String namespace in config.namespaces) {
+          var resource = await _loadFromFile(namespace + "." + lang);
+          await _saveToServer(lang, namespace, resource);
+        }
+      } else {
+        for (String namespace in config.namespaces) {
+          var resource = await _loadFromFile(lang);
+          await _saveToServer(lang, namespace, resource[namespace]);
+        }
       }
     }
   }
